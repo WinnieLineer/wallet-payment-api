@@ -9,5 +9,5 @@ val appModule =
     module {
         single { WalletService() }
         single { TransactionService(get()) }
-        single { ReconciliationService(get()) }
+        single { ReconciliationService() }
     }
