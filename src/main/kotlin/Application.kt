@@ -9,6 +9,7 @@ import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.cors.routing.CORS
+import kotlinx.serialization.json.Json
 import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
 
@@ -48,8 +49,15 @@ fun Application.module() {
     }
 
     install(ContentNegotiation) {
-        json()
+        json(
+            Json {
+                ignoreUnknownKeys = false
+                isLenient = true
+                explicitNulls = false
+            }
+        )
     }
+
     // Configure routing (should be last)
     configureRouting()
 }

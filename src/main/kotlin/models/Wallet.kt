@@ -1,5 +1,8 @@
 package com.example.wallet.models
 
+import com.example.wallet.common.BigDecimalSerializer
+import com.example.wallet.common.InstantSerializer
+import com.example.wallet.common.UUIDSerializer
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.id.UUIDTable
 import org.jetbrains.exposed.sql.javatime.timestamp

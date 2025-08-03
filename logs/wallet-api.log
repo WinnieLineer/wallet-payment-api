@@ -5260,3 +5260,137 @@ java.util.concurrent.RejectedExecutionException: event executor terminated
 2025-08-03 14:56:27.964 [eventLoopGroupProxy-4-1] INFO  [813a32df-718b-4176-8485-5bffed9782bc] Application - [31m500 Internal Server Error[m: [36mGET[m - /api/users/0aeb6ea1-95a8-4ae6-806f-85e463c1a6dd/wallets in 26ms
 2025-08-03 14:56:34.537 [eventLoopGroupProxy-4-1] INFO  [62df998d-b020-4738-b2bc-50bc71fe1de3] Application - [31m500 Internal Server Error[m: [36mGET[m - /api/users/0aeb6ea1-95a8-4ae6-806f-85e463c1a6dd/wallets in 27ms
 2025-08-03 14:57:19.547 [eventLoopGroupProxy-4-1] INFO  [6cc91cf1-0a0d-47f5-aa75-b610470e8fef] Application - [32m200 OK[m: [36mGET[m - /api/users/0aeb6ea1-95a8-4ae6-806f-85e463c1a6dd/wallets in 29ms
+2025-08-03 15:05:16.335 [eventLoopGroupProxy-4-4] INFO  [e16c9800-3943-495a-9821-2877709d7c5e] Application - [32m200 OK[m: [36mGET[m - /api/wallets/18da9a5f-3371-4763-96cf-a6f81343f5b4/balance in 24ms
+2025-08-03 15:05:32.331 [eventLoopGroupProxy-4-4] INFO  [b27bdb5e-5293-43b0-8dd7-cfb3c8a2120a] Application - [32m200 OK[m: [36mOPTIONS[m - /api/transactions/top-up in 2ms
+2025-08-03 15:05:32.371 [eventLoopGroupProxy-4-4] INFO  [48b5554d-5480-4bdb-a518-4ca7ec661823] Application - [32m200 OK[m: [36mPOST[m - /api/transactions/top-up in 38ms
+2025-08-03 15:05:38.924 [eventLoopGroupProxy-4-4] INFO  [41cf05eb-b6ae-4bc6-a376-9258eaad2203] Application - [32m200 OK[m: [36mGET[m - /api/wallets/18da9a5f-3371-4763-96cf-a6f81343f5b4/balance in 16ms
+2025-08-03 15:05:53.226 [eventLoopGroupProxy-4-4] INFO  [0bb03a9c-f050-497d-86c9-f5bcd786f215] Application - [32m200 OK[m: [36mOPTIONS[m - /api/transactions/payment in 0ms
+2025-08-03 15:05:53.236 [DefaultDispatcher-worker-3] INFO  [8aed30dd-c695-45f5-ac71-96e9beb2a8b0] Application - [31m500 Internal Server Error[m: [36mPOST[m - /api/transactions/payment in 7ms
+2025-08-03 15:06:24.738 [DefaultDispatcher-worker-3] INFO  [15260065-d516-441f-a3fc-bd20ee7cb2a7] Application - [31m500 Internal Server Error[m: [36mPOST[m - /api/transactions/payment in 8ms
+2025-08-03 15:08:10.576 [eventLoopGroupProxy-3-4] WARN  [] i.n.u.c.AbstractEventExecutor - A task raised an exception. Task: io.netty.channel.AbstractChannel$AbstractUnsafe$8@18da79a9
+java.util.concurrent.RejectedExecutionException: event executor terminated
+	at io.netty.util.concurrent.SingleThreadEventExecutor.reject(SingleThreadEventExecutor.java:1005)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.offerTask(SingleThreadEventExecutor.java:388)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.addTask(SingleThreadEventExecutor.java:381)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.execute(SingleThreadEventExecutor.java:907)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.execute0(SingleThreadEventExecutor.java:873)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.execute(SingleThreadEventExecutor.java:863)
+	at io.netty.channel.DefaultChannelPipeline.destroyUp(DefaultChannelPipeline.java:816)
+	at io.netty.channel.DefaultChannelPipeline.destroy(DefaultChannelPipeline.java:801)
+	at io.netty.channel.DefaultChannelPipeline.access$700(DefaultChannelPipeline.java:45)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelUnregistered(DefaultChannelPipeline.java:1411)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelUnregistered(DefaultChannelPipeline.java:780)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe$8.run(AbstractChannel.java:692)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:148)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:141)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:507)
+	at io.netty.channel.SingleThreadIoEventLoop.run(SingleThreadIoEventLoop.java:182)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:1073)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-08-03 15:08:10.576 [eventLoopGroupProxy-3-2] WARN  [] i.n.u.c.AbstractEventExecutor - A task raised an exception. Task: io.netty.channel.AbstractChannel$AbstractUnsafe$8@407d7ee8
+java.util.concurrent.RejectedExecutionException: event executor terminated
+	at io.netty.util.concurrent.SingleThreadEventExecutor.reject(SingleThreadEventExecutor.java:1005)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.offerTask(SingleThreadEventExecutor.java:388)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.addTask(SingleThreadEventExecutor.java:381)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.execute(SingleThreadEventExecutor.java:907)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.execute0(SingleThreadEventExecutor.java:873)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.execute(SingleThreadEventExecutor.java:863)
+	at io.netty.channel.DefaultChannelPipeline.destroyUp(DefaultChannelPipeline.java:816)
+	at io.netty.channel.DefaultChannelPipeline.destroy(DefaultChannelPipeline.java:801)
+	at io.netty.channel.DefaultChannelPipeline.access$700(DefaultChannelPipeline.java:45)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelUnregistered(DefaultChannelPipeline.java:1411)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelUnregistered(DefaultChannelPipeline.java:780)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe$8.run(AbstractChannel.java:692)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:148)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:141)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:507)
+	at io.netty.channel.SingleThreadIoEventLoop.run(SingleThreadIoEventLoop.java:182)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:1073)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-08-03 15:08:12.369 [main] INFO  [] Application - Autoreload is disabled because the development mode is off.
+2025-08-03 15:08:12.615 [main] INFO  [] org.flywaydb.core.FlywayExecutor - Database: jdbc:postgresql://localhost:5432/walletdb (PostgreSQL 15.12)
+2025-08-03 15:08:12.647 [main] INFO  [] o.f.core.internal.command.DbValidate - Successfully validated 2 migrations (execution time 00:00.016s)
+2025-08-03 15:08:12.685 [main] INFO  [] o.f.core.internal.command.DbMigrate - Current version of schema "public": 2
+2025-08-03 15:08:12.686 [main] INFO  [] o.f.core.internal.command.DbMigrate - Schema "public" is up to date. No migration necessary.
+2025-08-03 15:08:12.711 [main] INFO  [] [Koin] - Started 3 definitions in 0.595 ms
+2025-08-03 15:08:12.744 [main] INFO  [] Application - Application started in 0.453 seconds.
+2025-08-03 15:08:12.805 [DefaultDispatcher-worker-1] INFO  [] Application - Responding at http://0.0.0.0:8080
+2025-08-03 15:08:20.961 [DefaultDispatcher-worker-1] INFO  [142ed3a6-9910-4ca5-b60d-6b8ecf1a572f] Application - [31m500 Internal Server Error[m: [36mPOST[m - /api/transactions/payment in 174ms
+2025-08-03 15:09:00.437 [eventLoopGroupProxy-3-1] WARN  [] i.n.u.c.AbstractEventExecutor - A task raised an exception. Task: io.netty.channel.AbstractChannel$AbstractUnsafe$8@3cd1e3b8
+java.util.concurrent.RejectedExecutionException: event executor terminated
+	at io.netty.util.concurrent.SingleThreadEventExecutor.reject(SingleThreadEventExecutor.java:1005)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.offerTask(SingleThreadEventExecutor.java:388)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.addTask(SingleThreadEventExecutor.java:381)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.execute(SingleThreadEventExecutor.java:907)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.execute0(SingleThreadEventExecutor.java:873)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.execute(SingleThreadEventExecutor.java:863)
+	at io.netty.channel.DefaultChannelPipeline.destroyUp(DefaultChannelPipeline.java:816)
+	at io.netty.channel.DefaultChannelPipeline.destroy(DefaultChannelPipeline.java:801)
+	at io.netty.channel.DefaultChannelPipeline.access$700(DefaultChannelPipeline.java:45)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelUnregistered(DefaultChannelPipeline.java:1411)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelUnregistered(DefaultChannelPipeline.java:780)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe$8.run(AbstractChannel.java:692)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:148)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:141)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:507)
+	at io.netty.channel.SingleThreadIoEventLoop.run(SingleThreadIoEventLoop.java:182)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:1073)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-08-03 15:09:01.566 [main] INFO  [] Application - Autoreload is disabled because the development mode is off.
+2025-08-03 15:09:01.870 [main] INFO  [] org.flywaydb.core.FlywayExecutor - Database: jdbc:postgresql://localhost:5432/walletdb (PostgreSQL 15.12)
+2025-08-03 15:09:01.905 [main] INFO  [] o.f.core.internal.command.DbValidate - Successfully validated 2 migrations (execution time 00:00.018s)
+2025-08-03 15:09:01.953 [main] INFO  [] o.f.core.internal.command.DbMigrate - Current version of schema "public": 2
+2025-08-03 15:09:01.955 [main] INFO  [] o.f.core.internal.command.DbMigrate - Schema "public" is up to date. No migration necessary.
+2025-08-03 15:09:01.983 [main] INFO  [] [Koin] - Started 3 definitions in 0.75 ms
+2025-08-03 15:09:02.029 [main] INFO  [] Application - Application started in 0.563 seconds.
+2025-08-03 15:09:02.104 [DefaultDispatcher-worker-1] INFO  [] Application - Responding at http://0.0.0.0:8080
+2025-08-03 15:09:09.917 [DefaultDispatcher-worker-1] INFO  [eb290b27-2b5d-4444-a947-fb10eab11c0d] Application - [31m500 Internal Server Error[m: [36mPOST[m - /api/transactions/payment in 266ms
+2025-08-03 15:09:14.940 [DefaultDispatcher-worker-3] INFO  [be521c9f-c9a1-4687-9c8c-d1dcc0c2684d] Application - [31m500 Internal Server Error[m: [36mPOST[m - /api/transactions/payment in 3ms
+2025-08-03 15:09:38.215 [DefaultDispatcher-worker-7] INFO  [2baeac35-6c1f-42ee-ab10-be3e91db7797] Application - [31m500 Internal Server Error[m: [36mPOST[m - /api/transactions/payment in 4ms
+2025-08-03 15:09:48.214 [eventLoopGroupProxy-4-1] INFO  [c2358659-ebbc-451e-b36e-9b8a8549e438] Application - [31m400 Bad Request[m: [36mPOST[m - /api/transactions/payment in 107ms
+2025-08-03 15:10:27.761 [eventLoopGroupProxy-4-1] INFO  [b6bbb289-1c2e-435d-baf6-42d2d3567af0] Application - [32m200 OK[m: [36mPOST[m - /api/transactions/payment in 58ms
+2025-08-03 15:10:40.009 [eventLoopGroupProxy-4-1] INFO  [2a1fc620-f0f9-4a8a-b875-e26171241cec] Application - [31m500 Internal Server Error[m: [36mPOST[m - /api/transactions/payment in 23ms
+2025-08-03 15:11:16.415 [eventLoopGroupProxy-4-2] INFO  [16a5c6b9-e6d0-4e41-87d1-41cd8484ddfc] Application - [31m500 Internal Server Error[m: [36mPOST[m - /api/transactions/payment in 31ms
+2025-08-03 15:11:22.143 [eventLoopGroupProxy-4-2] INFO  [5857ff10-f84e-46f9-908c-08b481957399] Application - [32m200 OK[m: [36mPOST[m - /api/transactions/payment in 36ms
+2025-08-03 15:11:51.609 [eventLoopGroupProxy-4-2] INFO  [efa81142-537f-4038-acdc-9c61c108cea2] Application - [31m500 Internal Server Error[m: [36mPOST[m - /api/transactions/payment in 28ms
+2025-08-03 15:57:14.276 [eventLoopGroupProxy-4-3] INFO  [66942ab3-6311-494b-a485-feea81d57e1a] Application - [31m500 Internal Server Error[m: [36mPOST[m - /api/transactions/top-up in 78ms
+2025-08-03 15:57:42.773 [main] INFO  [] Application - Autoreload is disabled because the development mode is off.
+2025-08-03 15:57:43.609 [main] INFO  [] org.flywaydb.core.FlywayExecutor - Database: jdbc:postgresql://localhost:5432/walletdb (PostgreSQL 15.12)
+2025-08-03 15:57:43.700 [main] INFO  [] o.f.core.internal.command.DbValidate - Successfully validated 2 migrations (execution time 00:00.047s)
+2025-08-03 15:57:43.756 [main] INFO  [] o.f.core.internal.command.DbMigrate - Current version of schema "public": 2
+2025-08-03 15:57:43.764 [main] INFO  [] o.f.core.internal.command.DbMigrate - Schema "public" is up to date. No migration necessary.
+2025-08-03 15:57:43.913 [main] INFO  [] [Koin] - Started 3 definitions in 6.297 ms
+2025-08-03 15:57:44.101 [main] INFO  [] Application - Application started in 1.534 seconds.
+2025-08-03 15:57:44.303 [DefaultDispatcher-worker-1] INFO  [] Application - Responding at http://0.0.0.0:8080
+2025-08-03 15:57:47.912 [eventLoopGroupProxy-4-1] INFO  [dca53591-aa2b-41fb-8ebc-136300d1d529] Application - [31m500 Internal Server Error[m: [36mPOST[m - /api/transactions/top-up in 390ms
+2025-08-03 16:12:02.372 [eventLoopGroupProxy-4-2] INFO  [5f53793f-0e16-4512-9b2e-8be23f0839df] c.e.wallet.services.WalletService - Creating new user with name: Winnie Lin
+2025-08-03 16:12:02.400 [eventLoopGroupProxy-4-2] INFO  [5f53793f-0e16-4512-9b2e-8be23f0839df] c.e.wallet.services.WalletService - Successfully created user with ID: 66ada6b1-defc-4a86-8560-c66c06399a13
+2025-08-03 16:12:02.407 [eventLoopGroupProxy-4-2] INFO  [5f53793f-0e16-4512-9b2e-8be23f0839df] Application - [32m201 Created[m: [36mPOST[m - /api/users in 43ms
+2025-08-03 16:12:15.094 [eventLoopGroupProxy-4-2] INFO  [08f7f934-8c96-4a13-818b-6fccd65c5883] Application - [32m200 OK[m: [36mGET[m - /api/users/66ada6b1-defc-4a86-8560-c66c06399a13/wallets in 29ms
+2025-08-03 16:12:24.225 [eventLoopGroupProxy-4-2] INFO  [8e9c2c3d-2e8c-4012-8f30-def066714f51] c.e.wallet.services.WalletService - Creating wallet for user: 66ada6b1-defc-4a86-8560-c66c06399a13 with currency: USD
+2025-08-03 16:12:24.245 [eventLoopGroupProxy-4-2] INFO  [8e9c2c3d-2e8c-4012-8f30-def066714f51] c.e.wallet.services.WalletService - Successfully created wallet with ID: 79a00338-9198-4456-874a-abe9dd0fc923 for user: 66ada6b1-defc-4a86-8560-c66c06399a13
+2025-08-03 16:12:24.248 [eventLoopGroupProxy-4-2] INFO  [8e9c2c3d-2e8c-4012-8f30-def066714f51] Application - [32m201 Created[m: [36mPOST[m - /api/wallets in 32ms
+2025-08-03 16:12:37.746 [eventLoopGroupProxy-4-2] INFO  [6cad5b33-8007-40eb-99f7-ce7076ad1fb0] c.e.wallet.services.WalletService - Creating wallet for user: 66ada6b1-defc-4a86-8560-c66c06399a13 with currency: TWD
+2025-08-03 16:12:37.767 [eventLoopGroupProxy-4-2] INFO  [6cad5b33-8007-40eb-99f7-ce7076ad1fb0] c.e.wallet.services.WalletService - Successfully created wallet with ID: 1d68127b-6bd1-4ab9-9e6c-72887d3bb66c for user: 66ada6b1-defc-4a86-8560-c66c06399a13
+2025-08-03 16:12:37.771 [eventLoopGroupProxy-4-2] INFO  [6cad5b33-8007-40eb-99f7-ce7076ad1fb0] Application - [32m201 Created[m: [36mPOST[m - /api/wallets in 27ms
+2025-08-03 16:12:43.316 [eventLoopGroupProxy-4-2] INFO  [1a043571-179c-4f4a-bcd6-5eab130c824a] c.e.wallet.services.WalletService - Creating wallet for user: 66ada6b1-defc-4a86-8560-c66c06399a13 with currency: SGD
+2025-08-03 16:12:43.335 [eventLoopGroupProxy-4-2] INFO  [1a043571-179c-4f4a-bcd6-5eab130c824a] c.e.wallet.services.WalletService - Successfully created wallet with ID: 2a9602a2-c173-446e-9335-98d73b0fb7cd for user: 66ada6b1-defc-4a86-8560-c66c06399a13
+2025-08-03 16:12:43.339 [eventLoopGroupProxy-4-2] INFO  [1a043571-179c-4f4a-bcd6-5eab130c824a] Application - [32m201 Created[m: [36mPOST[m - /api/wallets in 24ms
+2025-08-03 16:12:50.539 [DefaultDispatcher-worker-3] INFO  [dfc45b35-849c-4674-b9c9-c7cd6079eefa] Application - [31m500 Internal Server Error[m: [36mPOST[m - /api/wallets in 5ms
+2025-08-03 16:13:16.632 [eventLoopGroupProxy-4-2] INFO  [c3c4304f-3fc8-4ed6-81f5-72c0bb9b4cfc] Application - [31m400 Bad Request[m: [36mPOST[m - /api/transactions/top-up in 22ms
+2025-08-03 16:13:27.559 [eventLoopGroupProxy-4-2] INFO  [e623c431-90b1-4a21-af5f-0e738e09d3c1] Application - [32m200 OK[m: [36mPOST[m - /api/transactions/top-up in 37ms
+2025-08-03 16:13:42.213 [eventLoopGroupProxy-4-2] INFO  [f49f9c0d-6eee-4a0d-8f20-744f8d768f51] Application - [32m200 OK[m: [36mPOST[m - /api/transactions/payment in 32ms
+2025-08-03 16:13:44.765 [eventLoopGroupProxy-4-2] INFO  [f79321ac-c13e-4f37-8663-bdf13499cd03] Application - [32m200 OK[m: [36mPOST[m - /api/transactions/payment in 23ms
+2025-08-03 16:14:03.133 [eventLoopGroupProxy-4-2] INFO  [54eedd91-f360-49cb-bbb8-3bd13a894fe0] Application - [31m400 Bad Request[m: [36mPOST[m - /api/transactions/transfer in 27ms
+2025-08-03 16:14:21.385 [eventLoopGroupProxy-4-2] INFO  [02b8f523-6d58-40e3-9073-0a956172f1d7] Application - [31m400 Bad Request[m: [36mPOST[m - /api/transactions/transfer in 21ms
+2025-08-03 16:14:38.341 [eventLoopGroupProxy-4-2] INFO  [ac20d1df-b8c9-4573-818f-9db91b2d1f0d] Application - [32m200 OK[m: [36mGET[m - /api/transactions/345638d5-ade9-44ee-8076-228d64c16347 in 23ms
+2025-08-03 16:15:02.102 [eventLoopGroupProxy-4-2] INFO  [9fcae1f1-0baf-4509-98fe-1406230e0836] Application - [32m200 OK[m: [36mGET[m - /api/wallets/79a00338-9198-4456-874a-abe9dd0fc923/transactions in 30ms
+2025-08-03 16:15:19.448 [eventLoopGroupProxy-4-2] INFO  [f3d21c43-9434-4b16-90e6-c7d391392fbd] Application - [32m200 OK[m: [36mGET[m - /api/reconciliation/report/2025-08-03 in 34ms
+2025-08-03 16:15:53.032 [eventLoopGroupProxy-4-2] INFO  [61bcb89a-ec6c-4d6c-bf96-a39282866df0] Application - [32m200 OK[m: [36mPOST[m - /api/reconciliation/reconcile/2025-08-03 in 29ms
+2025-08-03 16:16:20.837 [eventLoopGroupProxy-4-2] INFO  [87c7b0c9-88e8-4c46-aefa-9ad5f71f8591] Application - [32m200 OK[m: [36mGET[m - /api/reconciliation/mock-external/2025-08-03 in 19ms

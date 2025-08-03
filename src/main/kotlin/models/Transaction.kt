@@ -1,5 +1,8 @@
 package com.example.wallet.models
 
+import com.example.wallet.common.BigDecimalSerializer
+import com.example.wallet.common.InstantSerializer
+import com.example.wallet.common.UUIDSerializer
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.id.UUIDTable
 import org.jetbrains.exposed.sql.javatime.timestamp
@@ -23,10 +26,10 @@ enum class TransactionStatus {
 
 object Transactions : UUIDTable("transactions") {
     val walletId = uuid("wallet_id").references(Wallets.id)
-    val type = enumeration<TransactionType>("type")
+    val type = enumerationByName("type", 10, TransactionType::class) // 10 是 varchar 長度
     val amount = decimal("amount", 18, 2)
     val referenceId = varchar("reference_id", 100).nullable()
-    val status = enumeration<TransactionStatus>("status").default(TransactionStatus.PENDING)
+    val status = enumerationByName("status", 10, TransactionStatus::class) // 10 是 varchar 長度
     val targetWalletId = uuid("target_wallet_id").nullable()
     val idempotencyKey = varchar("idempotency_key", 100).uniqueIndex().nullable()
     val createdAt = timestamp("created_at")
