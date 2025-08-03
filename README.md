@@ -21,8 +21,6 @@ Here's a list of features included in this project:
 | [kotlinx.serialization](https://start.ktor.io/p/kotlinx-serialization) | Handles JSON serialization using kotlinx.serialization library                     |
 | [Exposed](https://start.ktor.io/p/exposed)                             | Adds Exposed database to your application                                          |
 | [Call Logging](https://start.ktor.io/p/call-logging)                   | Logs client requests                                                               |
-| [WebSockets](https://start.ktor.io/p/ktor-websockets)                  | Adds WebSocket protocol support for bidirectional client connections               |
-| [Rate Limiting](https://start.ktor.io/p/ktor-server-rate-limiting)     | Manage request rate limiting as you see fit                                        |
 | [Postgres](https://start.ktor.io/p/postgres)                           | Adds Postgres database to your application                                         |
 | [Swagger](https://start.ktor.io/p/swagger)                             | Serves Swagger UI for your project                                                 |
 
