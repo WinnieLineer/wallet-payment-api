@@ -54,7 +54,7 @@ fun Application.module() {
                 ignoreUnknownKeys = false
                 isLenient = true
                 explicitNulls = false
-            }
+            },
         )
     }
 

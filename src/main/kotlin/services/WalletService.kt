@@ -48,12 +48,12 @@ class WalletService {
             logger.info("Creating wallet for user: $userId with currency: $currency")
 
             // Check if user exists
-            val userExists = Users.select(Users.id)
-                .where {
-                    (Users.id eq userId )
-                }
-                .count() > 0
-
+            val userExists =
+                Users.select(Users.id)
+                    .where {
+                        (Users.id eq userId)
+                    }
+                    .count() > 0
 
             if (!userExists) {
                 logger.warn("Attempted to create wallet for non-existent user: $userId")
