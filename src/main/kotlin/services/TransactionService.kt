@@ -11,7 +11,7 @@ import com.example.wallet.models.TransferRequest
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.insertAndGetId
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import java.math.BigDecimal
@@ -217,7 +217,7 @@ class TransactionService(private val walletService: WalletService) {
         toDate: LocalDate?,
     ): List<Transaction> =
         transaction {
-            var query = Transactions.select { Transactions.walletId eq walletId }
+            var query = Transactions.selectAll().where { Transactions.walletId eq walletId }
 
             fromDate?.let {
                 query =
@@ -252,7 +252,7 @@ class TransactionService(private val walletService: WalletService) {
 
     fun getTransactionStatus(transactionId: UUID): Transaction? =
         transaction {
-            Transactions.select { Transactions.id eq transactionId }
+            Transactions.selectAll().where { Transactions.id eq transactionId }
                 .singleOrNull()
                 ?.let { row ->
                     Transaction(
@@ -271,7 +271,7 @@ class TransactionService(private val walletService: WalletService) {
 
     private fun findTransactionByIdempotencyKey(key: String): Transaction? =
         transaction {
-            Transactions.select { Transactions.idempotencyKey eq key }
+            Transactions.selectAll().where { Transactions.idempotencyKey eq key }
                 .singleOrNull()
                 ?.let { row ->
                     Transaction(

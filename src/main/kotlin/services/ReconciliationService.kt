@@ -6,7 +6,7 @@ import com.example.wallet.models.Wallets
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -36,7 +36,6 @@ data class TransactionRecord(
 data class TransactionSummary(
     val totalTransactions: Int,
     val totalAmount: Map<String, String>,
-    // Currency -> Amount
     val transactionsByType: Map<String, Int>,
     val transactionsByStatus: Map<String, Int>,
 )
@@ -58,7 +57,7 @@ data class TransactionDiscrepancy(
     val externalValue: String,
 )
 
-class ReconciliationService(private val walletService: WalletService) {
+class ReconciliationService() {
     fun generateDailyReport(
         date: LocalDate,
         format: String = "JSON",
@@ -68,7 +67,7 @@ class ReconciliationService(private val walletService: WalletService) {
             val endOfDay = date.plusDays(1).atStartOfDay().toInstant(java.time.ZoneOffset.UTC)
 
             val transactions =
-                (Transactions innerJoin Wallets).select {
+                (Transactions innerJoin Wallets).selectAll().where {
                     Transactions.createdAt.between(startOfDay, endOfDay) and
                         (Transactions.status eq TransactionStatus.COMPLETED)
                 }.map { row ->

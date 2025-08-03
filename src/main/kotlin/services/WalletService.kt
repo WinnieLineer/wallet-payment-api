@@ -10,7 +10,6 @@ import com.example.wallet.models.Wallets.balance
 import com.example.wallet.models.Wallets.updatedAt
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insertAndGetId
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
@@ -49,7 +48,13 @@ class WalletService {
             logger.info("Creating wallet for user: $userId with currency: $currency")
 
             // Check if user exists
-            val userExists = Users.select { Users.id eq userId }.count() > 0
+            val userExists = Users.select(Users.id)
+                .where {
+                    (Users.id eq userId )
+                }
+                .count() > 0
+
+
             if (!userExists) {
                 logger.warn("Attempted to create wallet for non-existent user: $userId")
                 throw IllegalArgumentException("User not found")
@@ -88,7 +93,7 @@ class WalletService {
 
     fun getWalletBalance(walletId: UUID): WalletBalanceResponse? =
         transaction {
-            Wallets.select { Wallets.id eq walletId }
+            Wallets.selectAll().where { Wallets.id eq walletId }
                 .singleOrNull()
                 ?.let { row ->
                     WalletBalanceResponse(
@@ -101,7 +106,7 @@ class WalletService {
 
     fun getUserWallets(userId: UUID): List<Wallet> =
         transaction {
-            Wallets.select { Wallets.userId eq userId }
+            Wallets.selectAll().where { Wallets.userId eq userId }
                 .map { row ->
                     Wallet(
                         id = row[Wallets.id].value,
@@ -125,7 +130,7 @@ class WalletService {
 
     internal fun getWallet(walletId: UUID): Wallet? =
         transaction {
-            Wallets.select { Wallets.id eq walletId }
+            Wallets.selectAll().where { Wallets.id eq walletId }
                 .singleOrNull()
                 ?.let { row ->
                     Wallet(
