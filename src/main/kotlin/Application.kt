@@ -1,9 +1,16 @@
 package com.example.wallet
 
-import io.ktor.server.application.*
-import org.jetbrains.exposed.sql.Database
+import com.example.wallet.plugins.configureDocumentation
+import com.example.wallet.plugins.configureLogging
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
+import io.ktor.serialization.kotlinx.json.json
+import io.ktor.server.application.Application
+import io.ktor.server.application.install
+import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.plugins.cors.routing.CORS
 import org.flywaydb.core.Flyway
-import java.sql.DriverManager
+import org.jetbrains.exposed.sql.Database
 
 fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain.main(args)
@@ -14,25 +21,35 @@ fun Application.module() {
     val dbUrl = dbConfig.property("url").getString()
     val dbUser = dbConfig.property("user").getString()
     val dbPassword = dbConfig.property("password").getString()
-
-    println("DB URL: $dbUrl")
-    println("Loaded drivers: " + DriverManager.getDrivers().toList())
-
     Database.connect(dbUrl, driver = "org.postgresql.Driver", user = dbUser, password = dbPassword)
 
     Flyway.configure()
-        .dataSource(dbUrl,dbUser,dbPassword)
+        .dataSource(dbUrl, dbUser, dbPassword)
         .locations("classpath:db/migration")
         .load()
         .migrate()
 
-    configureRouting()
-
-
+    // Configure plugins and features
     configureFrameworks()
+    configureLogging()
+    configureDocumentation()
     configureSerialization()
-    configureMonitoring()
-    configureSockets()
     configureAdministration()
     configureHTTP()
+
+    install(CORS) {
+        anyHost()
+        allowMethod(HttpMethod.Options)
+        allowMethod(HttpMethod.Post)
+        allowMethod(HttpMethod.Get)
+        allowHeader(HttpHeaders.ContentType)
+        allowHeader(HttpHeaders.Accept)
+        allowCredentials = true
+    }
+
+    install(ContentNegotiation) {
+        json()
+    }
+    // Configure routing (should be last)
+    configureRouting()
 }

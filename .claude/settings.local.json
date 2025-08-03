@@ -8,7 +8,10 @@
       "Bash(PGPASSWORD=password123 psql -U wallet_user -h localhost -p 5432 -d walletdb -c \"SELECT current_database(), current_user;\")",
       "Bash(PGPASSWORD=password123 psql -U wallet_user -h localhost -p 5432 -d walletdb -c \"SELECT schemaname, tablename FROM pg_tables WHERE schemaname = ''public'';\")",
       "Bash(PGPASSWORD=password123 psql -U wallet_user -h localhost -p 5432 -d walletdb -c \"SELECT table_name, column_name, data_type FROM information_schema.columns WHERE table_schema = ''public'' ORDER BY table_name, ordinal_position;\")",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(ls:*)",
+      "Bash(chmod:*)",
+      "Bash(mkdir:*)"
     ],
     "deny": []
   }

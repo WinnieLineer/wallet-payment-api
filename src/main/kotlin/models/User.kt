@@ -1,24 +1,27 @@
 package com.example.wallet.models
 
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.java.time.timestamp
+import jdk.jfr.internal.event.EventConfiguration.timestamp
+import kotlinx.serialization.Serializable
+import org.jetbrains.exposed.dao.id.UUIDTable
+import org.jetbrains.exposed.sql.javatime.timestamp
 import java.time.Instant
-import java.util.*
+import java.util.UUID
 
-object Users : Table() {
-    val id = uuid("id").autoGenerate()
+object Users : UUIDTable() {
     val name = varchar("name", 50)
     val createdAt = timestamp("created_at")
-    
-    override val primaryKey = PrimaryKey(id)
 }
 
+@Serializable
 data class User(
+    @Serializable(with = UUIDSerializer::class)
     val id: UUID,
     val name: String,
-    val createdAt: Instant
+    @Serializable(with = InstantSerializer::class)
+    val createdAt: Instant,
 )
 
+@Serializable
 data class CreateUserRequest(
-    val name: String
+    val name: String,
 )

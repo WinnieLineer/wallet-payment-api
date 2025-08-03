@@ -1,12 +1,42 @@
 <configuration>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{call-id}] %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
+    
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/wallet-api.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/wallet-api.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{call-id}] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Wallet API specific loggers -->
+    <logger name="com.example.wallet" level="INFO"/>
+    
+    <!-- Transaction logging at DEBUG level for detailed tracking -->
+    <logger name="com.example.wallet.services.TransactionService" level="DEBUG"/>
+    <logger name="com.example.wallet.services.WalletService" level="DEBUG"/>
+    
+    <!-- Database logging -->
+    <logger name="org.jetbrains.exposed.sql" level="DEBUG"/>
+    <logger name="org.flywaydb" level="INFO"/>
+    
+    <!-- External libraries -->
+    <logger name="org.eclipse.jetty" level="WARN"/>
+    <logger name="io.netty" level="WARN"/>
+    <logger name="io.ktor" level="INFO"/>
+    
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
     </root>
-    <logger name="org.eclipse.jetty" level="INFO"/>
-    <logger name="io.netty" level="INFO"/>
 </configuration>

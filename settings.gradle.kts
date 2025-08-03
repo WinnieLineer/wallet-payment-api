@@ -1,8 +1,14 @@
-rootProject.name = "wallet-payment-api"
-
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+        google()
+    }
+}
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
-        maven("https://packages.confluent.io/maven/")
+        google()
     }
 }
+rootProject.name = "wallet-payment-api"

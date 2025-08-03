@@ -1,18 +1,21 @@
 package com.example.wallet.controllers
 
-import com.example.wallet.models.*
+import com.example.wallet.models.CreateUserRequest
+import com.example.wallet.models.CreateWalletRequest
 import com.example.wallet.services.WalletService
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.request.receive
+import io.ktor.server.response.respond
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.get
+import io.ktor.server.routing.post
+import io.ktor.server.routing.route
 import org.koin.ktor.ext.inject
-import java.util.*
+import java.util.UUID
 
 fun Route.walletRoutes() {
     val walletService by inject<WalletService>()
-    
+
     route("/api/users") {
         post {
             try {
@@ -23,7 +26,7 @@ fun Route.walletRoutes() {
                 call.respond(HttpStatusCode.BadRequest, mapOf("error" to e.message))
             }
         }
-        
+
         get("/{userId}/wallets") {
             try {
                 val userId = UUID.fromString(call.parameters["userId"])
@@ -36,7 +39,7 @@ fun Route.walletRoutes() {
             }
         }
     }
-    
+
     route("/api/wallets") {
         post {
             try {
@@ -49,7 +52,7 @@ fun Route.walletRoutes() {
                 call.respond(HttpStatusCode.InternalServerError, mapOf("error" to e.message))
             }
         }
-        
+
         get("/{walletId}/balance") {
             try {
                 val walletId = UUID.fromString(call.parameters["walletId"])
