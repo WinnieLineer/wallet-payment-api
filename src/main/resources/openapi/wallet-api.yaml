@@ -1,0 +1,667 @@
+openapi: 3.0.0
+info:
+  title: Wallet Payment API
+  description: Multi-currency wallet management and payment processing system
+  version: 1.0.0
+  contact:
+    name: Wallet Team
+    email: support@wallet.com
+
+servers:
+  - url: http://localhost:8080
+    description: Development server
+
+paths:
+  # Health Check
+  /health:
+    get:
+      summary: Health check endpoint
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "OK"
+
+  # User Management
+  /api/users:
+    post:
+      summary: Create a new user
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/users/{userId}/wallets:
+    get:
+      summary: Get all wallets for a user
+      tags:
+        - Users
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: List of user wallets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Wallet'
+        '400':
+          description: Invalid user ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # Wallet Management
+  /api/wallets:
+    post:
+      summary: Create a new wallet for a user
+      tags:
+        - Wallets
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWalletRequest'
+      responses:
+        '201':
+          description: Wallet created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+        '400':
+          description: Invalid request or wallet already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/wallets/{walletId}/balance:
+    get:
+      summary: Get wallet balance
+      tags:
+        - Wallets
+      parameters:
+        - name: walletId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Wallet balance information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletBalanceResponse'
+        '404':
+          description: Wallet not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # Transaction Management
+  /api/transactions/top-up:
+    post:
+      summary: Top up wallet balance
+      tags:
+        - Transactions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TopUpRequest'
+      responses:
+        '200':
+          description: Top-up successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        '400':
+          description: Invalid request or insufficient funds
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/transactions/payment:
+    post:
+      summary: Make a payment from wallet
+      tags:
+        - Transactions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+      responses:
+        '200':
+          description: Payment successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        '400':
+          description: Invalid request or insufficient funds
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/transactions/transfer:
+    post:
+      summary: Transfer funds between wallets
+      tags:
+        - Transactions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest'
+      responses:
+        '200':
+          description: Transfer successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        '400':
+          description: Invalid request, insufficient funds, or currency mismatch
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/transactions/{transactionId}:
+    get:
+      summary: Get transaction status
+      tags:
+        - Transactions
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Transaction details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '404':
+          description: Transaction not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/wallets/{walletId}/transactions:
+    get:
+      summary: Get transaction history for a wallet
+      tags:
+        - Transactions
+      parameters:
+        - name: walletId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: fromDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+          description: Start date for filtering (YYYY-MM-DD)
+        - name: toDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+          description: End date for filtering (YYYY-MM-DD)
+      responses:
+        '200':
+          description: List of transactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # Reconciliation
+  /api/reconciliation/report/{date}:
+    get:
+      summary: Generate daily transaction report
+      tags:
+        - Reconciliation
+      parameters:
+        - name: date
+          in: path
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Report date (YYYY-MM-DD)
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [JSON, CSV]
+            default: JSON
+          description: Report format
+      responses:
+        '200':
+          description: Daily transaction report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyTransactionReport'
+            text/csv:
+              schema:
+                type: string
+        '400':
+          description: Invalid date format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/reconciliation/reconcile/{date}:
+    post:
+      summary: Reconcile transactions against external file
+      tags:
+        - Reconciliation
+      parameters:
+        - name: date
+          in: path
+          required: true
+          schema:
+            type: string
+            format: date
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/TransactionRecord'
+      responses:
+        '200':
+          description: Reconciliation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconciliationResult'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/reconciliation/mock-external/{date}:
+    get:
+      summary: Generate mock external transaction file for testing
+      tags:
+        - Reconciliation
+      parameters:
+        - name: date
+          in: path
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Mock external transaction data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransactionRecord'
+
+components:
+  schemas:
+    CreateUserRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          maxLength: 50
+          example: "John Doe"
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    CreateWalletRequest:
+      type: object
+      required:
+        - userId
+        - currency
+      properties:
+        userId:
+          type: string
+          format: uuid
+        currency:
+          type: string
+          enum: [USD, SGD, TWD]
+
+    Wallet:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        currency:
+          type: string
+          enum: [USD, SGD, TWD]
+        balance:
+          type: string
+          format: decimal
+          example: "100.50"
+        updatedAt:
+          type: string
+          format: date-time
+
+    WalletBalanceResponse:
+      type: object
+      properties:
+        walletId:
+          type: string
+          format: uuid
+        currency:
+          type: string
+          enum: [USD, SGD, TWD]
+        balance:
+          type: string
+          format: decimal
+          example: "100.50"
+
+    TopUpRequest:
+      type: object
+      required:
+        - walletId
+        - amount
+        - idempotencyKey
+      properties:
+        walletId:
+          type: string
+          format: uuid
+        amount:
+          type: string
+          format: decimal
+          example: "50.00"
+        referenceId:
+          type: string
+          example: "TOPUP-REF-001"
+        idempotencyKey:
+          type: string
+          example: "unique-key-123"
+
+    PaymentRequest:
+      type: object
+      required:
+        - walletId
+        - amount
+        - idempotencyKey
+      properties:
+        walletId:
+          type: string
+          format: uuid
+        amount:
+          type: string
+          format: decimal
+          example: "25.00"
+        referenceId:
+          type: string
+          example: "PAY-REF-001"
+        idempotencyKey:
+          type: string
+          example: "unique-key-456"
+
+    TransferRequest:
+      type: object
+      required:
+        - fromWalletId
+        - toWalletId
+        - amount
+        - idempotencyKey
+      properties:
+        fromWalletId:
+          type: string
+          format: uuid
+        toWalletId:
+          type: string
+          format: uuid
+        amount:
+          type: string
+          format: decimal
+          example: "75.00"
+        referenceId:
+          type: string
+          example: "TRANSFER-REF-001"
+        idempotencyKey:
+          type: string
+          example: "unique-key-789"
+
+    TransactionResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [PENDING, COMPLETED, FAILED, CANCELLED]
+        message:
+          type: string
+          example: "Transaction successful"
+
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        walletId:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [TOP_UP, PAYMENT, TRANSFER_OUT, TRANSFER_IN]
+        amount:
+          type: string
+          format: decimal
+        referenceId:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum: [PENDING, COMPLETED, FAILED, CANCELLED]
+        targetWalletId:
+          type: string
+          format: uuid
+          nullable: true
+        idempotencyKey:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+
+    TransactionRecord:
+      type: object
+      properties:
+        transactionId:
+          type: string
+        walletId:
+          type: string
+        type:
+          type: string
+        amount:
+          type: string
+        currency:
+          type: string
+        status:
+          type: string
+        referenceId:
+          type: string
+          nullable: true
+        timestamp:
+          type: string
+
+    DailyTransactionReport:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionRecord'
+        summary:
+          $ref: '#/components/schemas/TransactionSummary'
+
+    TransactionSummary:
+      type: object
+      properties:
+        totalTransactions:
+          type: integer
+        totalAmount:
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            USD: "1000.00"
+            SGD: "1500.00"
+        transactionsByType:
+          type: object
+          additionalProperties:
+            type: integer
+          example:
+            TOP_UP: 10
+            PAYMENT: 5
+        transactionsByStatus:
+          type: object
+          additionalProperties:
+            type: integer
+          example:
+            COMPLETED: 14
+            PENDING: 1
+
+    ReconciliationResult:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        matched:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionRecord'
+        missingInDb:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionRecord'
+        missingInExternal:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionRecord'
+        discrepancies:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionDiscrepancy'
+
+    TransactionDiscrepancy:
+      type: object
+      properties:
+        transactionId:
+          type: string
+        field:
+          type: string
+        dbValue:
+          type: string
+        externalValue:
+          type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Invalid request"
+
+tags:
+  - name: Users
+    description: User management operations
+  - name: Wallets
+    description: Wallet management operations
+  - name: Transactions
+    description: Transaction processing operations
+  - name: Reconciliation
+    description: Reconciliation and reporting operations

@@ -1,0 +1,653 @@
+openapi: 3.0.3
+info:
+  title: Wallet Payment API
+  description: |
+    A comprehensive REST API for wallet payment system built with Kotlin and Ktor framework.
+
+    This API provides functionality for:
+    - User management
+    - Wallet operations
+    - Transaction processing
+    - Reconciliation services
+
+    ## Authentication
+    All endpoints require proper authentication (implementation specific).
+
+    ## Rate Limiting
+    API calls are rate limited to prevent abuse.
+  version: "1.0"
+  contact:
+    name: API Support
+    email: support@example.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:8080
+    description: Development server
+  - url: https://api.wallet.example.com
+    description: Production server
+
+tags:
+  - name: Users
+    description: User management operations
+  - name: Wallets
+    description: Wallet operations and balance management
+  - name: Reconciliation
+    description: Transaction reconciliation services
+
+paths:
+  # User Management APIs
+  /api/users:
+    post:
+      tags:
+        - Users
+      summary: Create a new user
+      description: Creates a new user in the wallet system
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+            example:
+              name: "John Doe"
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                id: "550e8400-e29b-41d4-a716-446655440000"
+                name: "John Doe"
+                createdAt: "2024-01-15T10:30:00Z"
+                status: "active"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Invalid user name format"
+
+  /api/users/{userId}/wallets:
+    get:
+      tags:
+        - Users
+      summary: Get user wallets
+      description: Retrieves all wallets associated with a specific user
+      operationId: getUserWallets
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Unique identifier for the user
+          schema:
+            type: string
+            format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+      responses:
+        '200':
+          description: List of user wallets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Wallet'
+              example:
+                - id: "660e8400-e29b-41d4-a716-446655440001"
+                  userId: "550e8400-e29b-41d4-a716-446655440000"
+                  currency: "USD"
+                  balance: 1250.50
+                  status: "active"
+                  createdAt: "2024-01-15T10:30:00Z"
+        '400':
+          description: Invalid user ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Invalid user ID"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # Wallet Management APIs
+  /api/wallets:
+    post:
+      tags:
+        - Wallets
+      summary: Create a new wallet
+      description: Creates a new wallet for a user with specified currency
+      operationId: createWallet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWalletRequest'
+            example:
+              userId: "550e8400-e29b-41d4-a716-446655440000"
+              currency: "USD"
+      responses:
+        '201':
+          description: Wallet created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+              example:
+                id: "660e8400-e29b-41d4-a716-446655440001"
+                userId: "550e8400-e29b-41d4-a716-446655440000"
+                currency: "USD"
+                balance: 0.00
+                status: "active"
+                createdAt: "2024-01-15T10:30:00Z"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/wallets/{walletId}/balance:
+    get:
+      tags:
+        - Wallets
+      summary: Get wallet balance
+      description: Retrieves the current balance of a specific wallet
+      operationId: getWalletBalance
+      parameters:
+        - name: walletId
+          in: path
+          required: true
+          description: Unique identifier for the wallet
+          schema:
+            type: string
+            format: uuid
+          example: "660e8400-e29b-41d4-a716-446655440001"
+      responses:
+        '200':
+          description: Wallet balance information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletBalance'
+              example:
+                walletId: "660e8400-e29b-41d4-a716-446655440001"
+                balance: 1250.50
+                currency: "USD"
+                lastUpdated: "2024-01-15T14:30:00Z"
+        '400':
+          description: Invalid wallet ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Invalid wallet ID"
+        '404':
+          description: Wallet not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Wallet not found"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # Reconciliation APIs
+  /api/reconciliation/report/{date}:
+    get:
+      tags:
+        - Reconciliation
+      summary: Generate daily reconciliation report
+      description: Generates a reconciliation report for the specified date in JSON or CSV format
+      operationId: generateDailyReport
+      parameters:
+        - name: date
+          in: path
+          required: true
+          description: Date for the report in YYYY-MM-DD format
+          schema:
+            type: string
+            format: date
+          example: "2024-01-15"
+        - name: format
+          in: query
+          required: false
+          description: Report format
+          schema:
+            type: string
+            enum: [JSON, CSV]
+            default: JSON
+          example: "JSON"
+      responses:
+        '200':
+          description: Reconciliation report generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconciliationReport'
+              example:
+                date: "2024-01-15"
+                totalTransactions: 150
+                totalAmount: 25000.50
+                reconciliationStatus: "completed"
+                summary:
+                  matched: 148
+                  unmatched: 2
+                  discrepancies: 0
+            text/csv:
+              schema:
+                type: string
+              example: |
+                Date,Transaction ID,Amount,Status,Type
+                2024-01-15,TXN001,100.50,completed,credit
+                2024-01-15,TXN002,250.00,pending,debit
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Invalid date format"
+
+  /api/reconciliation/reconcile/{date}:
+    post:
+      tags:
+        - Reconciliation
+      summary: Reconcile transactions
+      description: Reconciles internal transactions with external transaction records for a specific date
+      operationId: reconcileTransactions
+      parameters:
+        - name: date
+          in: path
+          required: true
+          description: Date for reconciliation in YYYY-MM-DD format
+          schema:
+            type: string
+            format: date
+          example: "2024-01-15"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/TransactionRecord'
+            example:
+              - id: "TXN001"
+                amount: 100.50
+                timestamp: "2024-01-15T10:30:00Z"
+                type: "credit"
+                status: "completed"
+              - id: "TXN002"
+                amount: 250.00
+                timestamp: "2024-01-15T14:15:00Z"
+                type: "debit"
+                status: "completed"
+      responses:
+        '200':
+          description: Reconciliation completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconciliationResult'
+              example:
+                reconciliationId: "REC-2024-01-15-001"
+                date: "2024-01-15"
+                status: "completed"
+                matchedTransactions: 45
+                unmatchedInternal: 2
+                unmatchedExternal: 1
+                discrepancies:
+                  - transactionId: "TXN003"
+                    issue: "Amount mismatch"
+                    internalAmount: 100.00
+                    externalAmount: 105.00
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/reconciliation/mock-external/{date}:
+    get:
+      tags:
+        - Reconciliation
+      summary: Generate mock external data
+      description: Generates mock external transaction data for testing purposes
+      operationId: generateMockExternalData
+      parameters:
+        - name: date
+          in: path
+          required: true
+          description: Date for mock data in YYYY-MM-DD format
+          schema:
+            type: string
+            format: date
+          example: "2024-01-15"
+      responses:
+        '200':
+          description: Mock external data generated successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransactionRecord'
+              example:
+                - id: "EXT-TXN001"
+                  amount: 100.50
+                  timestamp: "2024-01-15T10:30:00Z"
+                  type: "credit"
+                  status: "completed"
+                  reference: "REF001"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    # Request/Response Models
+    CreateUserRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: User's full name
+          example: "John Doe"
+          minLength: 1
+          maxLength: 100
+
+    CreateWalletRequest:
+      type: object
+      required:
+        - userId
+        - currency
+      properties:
+        userId:
+          type: string
+          format: uuid
+          description: ID of the user who owns the wallet
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        currency:
+          type: string
+          description: Currency code for the wallet
+          example: "USD"
+          pattern: "^[A-Z]{3}$"
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the user
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        name:
+          type: string
+          description: User's full name
+          example: "John Doe"
+        createdAt:
+          type: string
+          format: date-time
+          description: User creation timestamp
+          example: "2024-01-15T10:30:00Z"
+        status:
+          type: string
+          enum: [active, inactive, suspended]
+          description: User account status
+          example: "active"
+
+    Wallet:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the wallet
+          example: "660e8400-e29b-41d4-a716-446655440001"
+        userId:
+          type: string
+          format: uuid
+          description: ID of the wallet owner
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        currency:
+          type: string
+          description: Wallet currency code
+          example: "USD"
+        balance:
+          type: number
+          format: decimal
+          description: Current wallet balance
+          example: 1250.50
+        status:
+          type: string
+          enum: [active, inactive, frozen]
+          description: Wallet status
+          example: "active"
+        createdAt:
+          type: string
+          format: date-time
+          description: Wallet creation timestamp
+          example: "2024-01-15T10:30:00Z"
+
+    WalletBalance:
+      type: object
+      properties:
+        walletId:
+          type: string
+          format: uuid
+          description: Wallet identifier
+          example: "660e8400-e29b-41d4-a716-446655440001"
+        balance:
+          type: number
+          format: decimal
+          description: Current balance
+          example: 1250.50
+        currency:
+          type: string
+          description: Currency code
+          example: "USD"
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Last balance update timestamp
+          example: "2024-01-15T14:30:00Z"
+
+    TransactionRecord:
+      type: object
+      required:
+        - id
+        - amount
+        - timestamp
+        - type
+        - status
+      properties:
+        id:
+          type: string
+          description: Unique transaction identifier
+          example: "TXN001"
+        amount:
+          type: number
+          format: decimal
+          description: Transaction amount
+          example: 100.50
+        timestamp:
+          type: string
+          format: date-time
+          description: Transaction timestamp
+          example: "2024-01-15T10:30:00Z"
+        type:
+          type: string
+          enum: [credit, debit]
+          description: Transaction type
+          example: "credit"
+        status:
+          type: string
+          enum: [completed, pending, failed]
+          description: Transaction status
+          example: "completed"
+        reference:
+          type: string
+          description: External reference number
+          example: "REF001"
+
+    ReconciliationReport:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          description: Report date
+          example: "2024-01-15"
+        totalTransactions:
+          type: integer
+          description: Total number of transactions
+          example: 150
+        totalAmount:
+          type: number
+          format: decimal
+          description: Total transaction amount
+          example: 25000.50
+        reconciliationStatus:
+          type: string
+          enum: [completed, in_progress, failed]
+          description: Overall reconciliation status
+          example: "completed"
+        summary:
+          type: object
+          properties:
+            matched:
+              type: integer
+              description: Number of matched transactions
+              example: 148
+            unmatched:
+              type: integer
+              description: Number of unmatched transactions
+              example: 2
+            discrepancies:
+              type: integer
+              description: Number of discrepancies found
+              example: 0
+
+    ReconciliationResult:
+      type: object
+      properties:
+        reconciliationId:
+          type: string
+          description: Unique reconciliation identifier
+          example: "REC-2024-01-15-001"
+        date:
+          type: string
+          format: date
+          description: Reconciliation date
+          example: "2024-01-15"
+        status:
+          type: string
+          enum: [completed, failed, partial]
+          description: Reconciliation status
+          example: "completed"
+        matchedTransactions:
+          type: integer
+          description: Number of successfully matched transactions
+          example: 45
+        unmatchedInternal:
+          type: integer
+          description: Number of unmatched internal transactions
+          example: 2
+        unmatchedExternal:
+          type: integer
+          description: Number of unmatched external transactions
+          example: 1
+        discrepancies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Discrepancy'
+
+    Discrepancy:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          description: Transaction ID with discrepancy
+          example: "TXN003"
+        issue:
+          type: string
+          description: Description of the discrepancy
+          example: "Amount mismatch"
+        internalAmount:
+          type: number
+          format: decimal
+          description: Amount in internal system
+          example: 100.00
+        externalAmount:
+          type: number
+          format: decimal
+          description: Amount in external system
+          example: 105.00
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "Invalid request parameters"
+        code:
+          type: string
+          description: Error code (optional)
+          example: "INVALID_PARAM"
+        timestamp:
+          type: string
+          format: date-time
+          description: Error timestamp (optional)
+          example: "2024-01-15T10:30:00Z"
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token for API authentication
+
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key for authentication
+
+security:
+  - BearerAuth: []
+  - ApiKeyAuth: []
